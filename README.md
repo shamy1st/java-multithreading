@@ -180,12 +180,12 @@ multiple threads try to change shared data at the same time.
 4. **Atomic Objects** write an object as a single atomic operation. (example: AtomicInteger)
 5. **Partitioning** into segments that can be accessed concurrently. 
 
-### Confinement
+### 1. Confinement
 No shared data, each thread have its own data.
 
 In the previous example each thread will have its **DownloadStatus** object and after all threads finish will sum all **totalBytes** together.
 
-### Synchronization
+### 3. Synchronization
 Prevent multiple threads to access the same object concurrently.
 
 * **Lock**
@@ -242,7 +242,36 @@ Prevent multiple threads to access the same object concurrently.
             }
         }
 
-### Atomic Objects
+* **Synchronized Collections** uses locks, and it have a bad performance (use **Concurrent Collections**)
+    
+        public class Main {
+            public static void main(String[] args) {
+                //Collection<Integer> collection = new ArrayList<>(); //cause race condition
+                Collection<Integer> collection = Collections.synchronizedCollection(new ArrayList<>());
+
+                Thread thread1 = new Thread(() -> {
+                    collection.addAll(Arrays.asList(1, 2, 3));
+                });
+
+                Thread thread2 = new Thread(() -> {
+                    collection.addAll(Arrays.asList(4, 5, 6));
+                });
+
+                thread1.start();
+                thread2.start();
+
+                try {
+                    thread1.join();
+                    thread2.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(collection);
+            }
+        }        
+
+### 4. Atomic Objects
 Write an object as a single atomic operation. / use a technique called "compare & swape". [link](https://docs.oracle.com/javase/8/docs/api/?java/util/concurrent/atomic/package-summary.html)
 
     public class DownloadStatus {
@@ -270,6 +299,8 @@ Write an object as a single atomic operation. / use a technique called "compare 
                 this.totalBytes.increment();
             }
         }
+
+### 5. Partitioning
 
 
 ### Visibility Problem - Thread Safety Strategies
