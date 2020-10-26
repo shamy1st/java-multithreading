@@ -243,7 +243,7 @@ Prevent multiple threads to access the same object concurrently.
         }
 
 ### Atomic Objects
-Write an object as a single atomic operation. / use a technique called "compare & swape".
+Write an object as a single atomic operation. / use a technique called "compare & swape". [link](https://docs.oracle.com/javase/8/docs/api/?java/util/concurrent/atomic/package-summary.html)
 
     public class DownloadStatus {
         private AtomicInteger totalBytes = new AtomicInteger();
@@ -256,6 +256,21 @@ Write an object as a single atomic operation. / use a technique called "compare 
             this.totalBytes.incrementAndGet();
         }
     }
+
+* **Adders** is more faster than Atomic. / if you have multiple threads modify a shared data frequently prefered to use Adder than Atomic.
+    
+        public class DownloadStatus {
+            private LongAdder totalBytes = new LongAdder();
+
+            public int getTotalBytes() {
+                return totalBytes.intValue();
+            }
+
+            public void incrementTotalBytes() {
+                this.totalBytes.increment();
+            }
+        }
+
 
 ### Visibility Problem - Thread Safety Strategies
 1. **Volatile Keyword**
