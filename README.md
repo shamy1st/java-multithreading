@@ -35,3 +35,38 @@
     } catch (InterruptedException e) {
         e.printStackTrace();
     }
+    
+### Join Thread
+Example: main thread waits "Thread-0" to finish.
+
+    public class Main {
+        public static void main(String[] args) {
+            System.out.println("Current Thread: " + Thread.currentThread().getName());
+            
+            Thread thread = new Thread(new FileDownloader());
+            thread.start();
+
+            // main thread waits "Thread-0" to finish.
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("Thread main finished.");
+        }
+    }
+
+    public class FileDownloader implements Runnable {
+        @Override
+        public void run() {
+            System.out.println(Thread.currentThread().getName() + ": File Downloading ...");
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
