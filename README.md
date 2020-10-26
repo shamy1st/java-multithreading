@@ -175,7 +175,8 @@ multiple threads try to change shared data at the same time.
 
 1. **Confinement** no shared data, each thread have its own data.
 2. **Immutability** unmodified objects.
-3. **Synchronization** prevent multiple threads to access the same object concurrently. (use locks and leads to deadlock which crash the program, should be avoided)
+3. **Synchronization** prevent multiple threads to access the same object concurrently. 
+    * use locks and leads to deadlock which crash the program, should be avoided.
 4. **Atomic Object** write an object as a single atomic operation. (example: AtomicInteger)
 5. **Partitioning** into segments that can access concurrently. 
 
