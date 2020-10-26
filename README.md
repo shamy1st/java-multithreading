@@ -70,3 +70,38 @@ Example: main thread waits "Thread-0" to finish.
         }
     }
 
+### Interrupt Thread
+Interrupt a thread doesn't breaks out it, but it raise a flag of interrupt and it is optional to thread to cancel or not.
+
+    public class Main {
+        public static void main(String[] args) {
+            System.out.println("Current Thread: " + Thread.currentThread().getName());
+
+            Thread thread = new Thread(new FileDownloader());
+            thread.start();
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            thread.interrupt();
+
+            System.out.println("Thread main finished.");
+        }
+    }
+
+    public class FileDownloader implements Runnable {
+        @Override
+        public void run() {
+            System.out.println(Thread.currentThread().getName() + ": File Downloading ...");
+
+            for(int i=0; i<Integer.MAX_VALUE; i++) {
+                if(Thread.currentThread().isInterrupted())
+                    return;
+
+                System.out.println("Download byte " + i);
+            }
+        }
+    }
