@@ -12,4 +12,21 @@
         }
     }
     
+### Start Thread
     
+    public class Main {
+        public static void main(String[] args) {
+            System.out.println("Current Thread: " + Thread.currentThread().getName()); // main thread
+
+            Thread thread = new Thread(new FileDownloader());
+            thread.start();
+        }
+    }
+
+    public class FileDownloader implements Runnable {
+        @Override
+        public void run() {
+            System.out.println(Thread.currentThread().getName() + ": File Downloading ..."); // Thread-0
+        }
+    }    
+
