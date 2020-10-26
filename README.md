@@ -316,3 +316,54 @@ Write an object as a single atomic operation. / use a technique called "compare 
 
 ### Visibility Problem - Thread Safety Strategies
 * **Volatile Keyword** guarantee that changes of shared data is visible accross threads. / It makes thread depend on value in main memory instead of cache memory.
+
+        public class Main {
+            public static void main(String[] args) {
+                DownloadStatus status = new DownloadStatus();
+
+                Thread thread1 = new Thread(new FileDownloader(status));
+
+                //check if thread1 is done
+                Thread thread2 = new Thread(() -> {
+                    while(!status.isDone()) { }
+                    System.out.println("Downloading ...");
+                });
+
+                thread1.start();
+                thread2.start();
+            }
+        }
+
+        public class DownloadStatus {
+            private volatile boolean isDone;
+
+            public boolean isDone() {
+                return isDone;
+            }
+
+            public void done() {
+                isDone = true;
+            }
+        }
+
+        public class FileDownloader implements Runnable {
+            private DownloadStatus status;
+
+            public FileDownloader(DownloadStatus status) {
+                this.status = status;
+            }
+
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getName() + ": File Downloading ...");
+
+                for(int i=0; i<Integer.MAX_VALUE; i++) {
+                    if(Thread.currentThread().isInterrupted())
+                        return;
+                }
+
+                status.done();
+
+                System.out.println(Thread.currentThread().getName() + ": Download complete!");
+            }
+        }
