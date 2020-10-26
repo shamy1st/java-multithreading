@@ -315,4 +315,4 @@ Write an object as a single atomic operation. / use a technique called "compare 
             }
 
 ### Visibility Problem - Thread Safety Strategies
-1. **Volatile Keyword**
+* **Volatile Keyword** guarantee that changes of shared data is visible accross threads. / It makes thread depend on value in main memory instead of cache memory.
