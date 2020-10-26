@@ -242,7 +242,7 @@ Prevent multiple threads to access the same object concurrently.
             }
         }
 
-* **Synchronized Collections** uses locks, and it have a bad performance (use **Concurrent Collections**)
+* **Synchronized Collections** uses locks, and it has a bad performance (instead use **Concurrent Collections**)
     
         public class Main {
             public static void main(String[] args) {
@@ -301,7 +301,18 @@ Write an object as a single atomic operation. / use a technique called "compare 
         }
 
 ### 5. Partitioning
-
+* **Concurrent Collections** divide data into segments different thread can concurrently work with different segments, but one thread at a time can access a given segment. (faster than synchronized collections)
+    * Example: ConcurrentHashMap, ConcurrentLinkedDeque, ConcurrentMap, ...
+    
+            public class Main {
+                public static void main(String[] args) {
+                    //Map<Integer, String> map = new HashMap<>();
+                    Map<Integer, String> map = new ConcurrentHashMap<>();
+                    map.put(1, "X");
+                    map.get(1);
+                    map.remove(1);
+                }
+            }
 
 ### Visibility Problem - Thread Safety Strategies
 1. **Volatile Keyword**
