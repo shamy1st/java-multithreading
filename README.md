@@ -109,3 +109,74 @@ Interrupt a thread doesn't breaks out it, but it raise a flag of interrupt and i
 ### Concurrency Problems
 1. **Race Condition** multiple threads try to change shared data at the same time.
 2. **Visibility Problem** one thread changes a shared data but the change does not visibile to other threads.
+
+### Race Condition
+multiple threads try to change shared data at the same time.
+
+    public class Main {
+        public static void main(String[] args) {
+            DownloadStatus status = new DownloadStatus();
+
+            List<Thread> threads = new ArrayList<>();
+            for(int i=0; i<10; i++) {
+                Thread thread = new Thread(new FileDownloader(status));
+                thread.start();
+                threads.add(thread);
+            }
+
+            threads.forEach(thread -> {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            // expected: 10000, but it always print less (ex: 81395) because of race condition problem
+            System.out.println("Total Bytes: " + status.getTotalBytes());
+        }
+    }
+
+    public class FileDownloader implements Runnable {
+        private DownloadStatus status;
+
+        public FileDownloader(DownloadStatus status) {
+            this.status = status;
+        }
+
+        @Override
+        public void run() {
+            System.out.println(Thread.currentThread().getName() + ": File Downloading ...");
+
+            for(int i=0; i<10_000; i++) {
+                if(Thread.currentThread().isInterrupted())
+                    return;
+
+                status.incrementTotalBytes();
+            }
+
+            System.out.println(Thread.currentThread().getName() + ": Download complete!");
+        }
+    }
+
+    public class DownloadStatus {
+        private int totalBytes;
+
+        public int getTotalBytes() {
+            return totalBytes;
+        }
+
+        public void incrementTotalBytes() {
+            this.totalBytes++;
+        }
+    }
+    
+### Thread Safety Strategies
+
+1. **Confinement** no shared data, each thread have its own data.
+2. **Immutability** unmodified objects.
+3. **Synchronization** prevent multiple threads to access the same object concurrently. (use locks and leads to deadlock which crash the program, should be avoided)
+4. **Atomic Object** write an object as a single atomic operation. (example: AtomicInteger)
+5. **Partitioning** into segments that can access concurrently. 
+
+
