@@ -223,21 +223,21 @@ Prevent multiple threads to access the same object concurrently.
             }
         }
 
-Try to avoid prevoius two ways because of passing **this** to synchronized block cause locking on the current object and if you have two synchronized blocks one of them can't access its block while the another block accessing its block!
+    Try to avoid prevoius two ways because of passing **this** to synchronized block cause locking on the current object and if you have two synchronized blocks one of them can't access its block while the another block accessing its block!
 
-The right way to use synchronized:
+    The right way to use synchronized:
 
-    public class DownloadStatus {
-        private int totalBytes;
-        private Object totalBytesLock = new Object();
+        public class DownloadStatus {
+            private int totalBytes;
+            private Object totalBytesLock = new Object();
 
-        public int getTotalBytes() {
-            return totalBytes;
-        }
+            public int getTotalBytes() {
+                return totalBytes;
+            }
 
-        public void incrementTotalBytes() {
-            synchronized(totalBytesLock) {
-                this.totalBytes++;
+            public void incrementTotalBytes() {
+                synchronized(totalBytesLock) {
+                    this.totalBytes++;
+                }
             }
         }
-    }
