@@ -1,9 +1,7 @@
 # Multi-threading
 **Multi-threading** is a process of executing multiple threads simultaneously.
 
-**Process**: is an instance of a program.
-
-**Thread**: is a lightweight sub-process.
+**Process**: is an instance of a program. / **Thread**: is a lightweight sub-process.
 
     public class Main {
         public static void main(String[] args) {
