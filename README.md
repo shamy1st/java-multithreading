@@ -13,7 +13,6 @@
     }
     
 ### Start Thread
-    
     public class Main {
         public static void main(String[] args) {
             System.out.println("Current Thread: " + Thread.currentThread().getName()); // main thread
@@ -30,3 +29,9 @@
         }
     }    
 
+### Pause Thread
+    try {
+        Thread.sleep(5000); // 5000 msec
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
