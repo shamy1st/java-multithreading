@@ -105,3 +105,7 @@ Interrupt a thread doesn't breaks out it, but it raise a flag of interrupt and i
             }
         }
     }
+
+### Concurrency Problems
+1. **Race Condition** multiple threads try to change shared data at the same time.
+2. **Visibility Problem** one thread changes a shared data but the change does not visibile to other threads.
