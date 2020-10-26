@@ -243,6 +243,8 @@ Prevent multiple threads to access the same object concurrently.
         }
 
 ### Atomic Objects
+Write an object as a single atomic operation. / use a technique called "compare & swape".
+
     public class DownloadStatus {
         private AtomicInteger totalBytes = new AtomicInteger();
 
