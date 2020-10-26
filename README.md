@@ -175,9 +175,69 @@ multiple threads try to change shared data at the same time.
 
 1. **Confinement** no shared data, each thread have its own data.
 2. **Immutability** unmodified objects.
-3. **Synchronization** prevent multiple threads to access the same object concurrently. 
+3. **Synchronization** prevent multiple threads to access the same object concurrently.
     * use locks and leads to deadlock which crash the program, should be avoided.
 4. **Atomic Object** write an object as a single atomic operation. (example: AtomicInteger)
 5. **Partitioning** into segments that can be accessed concurrently. 
 
+### Confinement
+No shared data, each thread have its own data.
 
+In the previous example each thread will have its **DownloadStatus** object and after all threads finish will sum all **totalBytes** together.
+
+### Synchronization
+Prevent multiple threads to access the same object concurrently.
+
+* **Lock**
+
+        public class DownloadStatus {
+            private int totalBytes;
+            private Lock lock = new ReentrantLock();
+
+            public int getTotalBytes() {
+                return totalBytes;
+            }
+
+            public void incrementTotalBytes() {
+                lock.lock();
+                try {
+                    this.totalBytes++;
+                } finally {
+                    // to avoid not doing unlock() when crash, which cause deadlock.
+                    lock.unlock();
+                }
+            }
+        }
+    
+* **Synchronized Keyword** (bad practice)
+
+        public synchronized void incrementTotalBytes() {
+            this.totalBytes++;
+        }
+
+        //same as 
+
+        public void incrementTotalBytes() {
+            synchronized(this) {
+                this.totalBytes++;
+            }
+        }
+
+Try to avoid prevoius two ways because of passing **this** to synchronized block cause locking on the current object and if you have two synchronized blocks one of them can't access its block while the another block accessing its block!
+
+The right way to use synchronized:
+
+    public class DownloadStatus {
+        private int totalBytes;
+        private Object totalBytesLock = new Object();
+
+        public int getTotalBytes() {
+            return totalBytes;
+        }
+
+        public void incrementTotalBytes() {
+            synchronized(totalBytesLock) {
+                this.totalBytes++;
+            }
+        }
+    }
