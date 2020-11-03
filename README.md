@@ -11,7 +11,10 @@
             System.out.println("Available Threads: " + Runtime.getRuntime().availableProcessors());
         }
     }
-    
+
+### Lifecycle
+![](https://github.com/shamy1st/java-multithreading/blob/main/lifecycle.png)
+
 ### Start Thread
     public class Main {
         public static void main(String[] args) {
